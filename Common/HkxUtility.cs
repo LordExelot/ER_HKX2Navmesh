@@ -5,12 +5,19 @@ namespace ER_HKX2Navmesh.Common;
 
 public static class HkxUtility
 {
+    private static readonly JsonSerializerOptions jsonOptions = new()
+    {
+        WriteIndented = true, // For better readability
+        IncludeFields = true, // Include fields in serialization
+    };
+
     public static hkaiNavMeshGenerationSnapshot GetDefaultNavmeshGenerationSnapshot()
     {
         // Initialize the elden ring dll so we can construct the settings
-        ERNavmeshGen navma = new ERNavmeshGen();
+        var _ = new ERNavmeshGen();
+
         // This takes care of all constructors for the snapshot and generation settings
-        hkaiNavMeshGenerationSnapshot snapshot = new hkaiNavMeshGenerationSnapshot();
+        hkaiNavMeshGenerationSnapshot snapshot = new();
 
         // set the up for Elden Ring
         snapshot.settings.up = new hkVector4 { x = 0f, y = 1f, z = 0f, w = 0f };
@@ -32,9 +39,10 @@ public static class HkxUtility
     public static hkaiNavMeshGenerationSnapshot GetLodNavmeshGenerationSnapshot()
     {
         // Initialize the elden ring dll so we can construct the settings
-        ERNavmeshGen navma = new ERNavmeshGen();
+        var _ = new ERNavmeshGen();
+
         // This takes care of all constructors for the snapshot and generation settings
-        hkaiNavMeshGenerationSnapshot snapshot = new hkaiNavMeshGenerationSnapshot();
+        hkaiNavMeshGenerationSnapshot snapshot = new();
 
         // set the up for Elden Ring
         snapshot.settings.up = new hkVector4 { x = 0f, y = 1f, z = 0f, w = 0f };
@@ -55,12 +63,8 @@ public static class HkxUtility
     }
     public static void SaveNavmeshGenerationSettings(hkaiNavMeshGenerationSnapshot snapshot, string outputPath)
     {
-        // Configure the JSON Serializer
-        var jsonOptions = new JsonSerializerOptions
-        {
-            IncludeFields = true, // CRITICAL: Tells the serializer to look at our struct fields!
-            WriteIndented = true
-        };
+        if (File.Exists(outputPath))
+            return; // Don't overwrite existing settings, as they might have been modified by the user
 
         // Serialize to a JSON string and write to disk  
         string jsonOutput = JsonSerializer.Serialize(snapshot, jsonOptions);
