@@ -46,7 +46,7 @@ class Program
         await HKXtoNavmesh.GenerateNavmeshAsync(collisionPaths, outputPath, map, mapFileId);
 
         Console.WriteLine("Files created succesfully");
-        Console.WriteLine("Output Path: " + outputPath);
+        Console.WriteLine("Output Path: " + Path.Combine(outputPath, "map", $"m{map:D2}", $"m{mapFileId}") + "\\");
         Console.WriteLine();
     }
 }
