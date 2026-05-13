@@ -1,17 +1,18 @@
 ﻿using SoulsFormats;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using static SoulsFormats.DCX;
 
 namespace ER_HKX2Navmesh.Common;
 
-public class FileCreationWorker
+public class HKXtoNavmesh
 {
     private const int NVA_NV_UNK00_MAGIC = 1726789910;
     private static readonly string _cachePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cache");
     private static readonly string _resourcesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
     private static readonly string _generatorPath = Path.Combine(_resourcesPath, "ERNavmeshGenerator.exe");
 
-    public static async Task CreateNavmesh(List<string> collisionPaths, string outputPath, int map, string mapFileId)
+    public static async Task GenerateNavmeshAsync(List<string> collisionPaths, string outputPath, int map, string mapFileId)
     {
         // Create settings files
         string nNvmSettingsPath = Path.Combine(_cachePath, "n_nav_settings.json");
@@ -34,8 +35,8 @@ public class FileCreationWorker
             try
             {
                 nva.Navmeshes.Add(CreateNavmeshEntry(navmeshModelId));
-                nvmhktbnd.Files.Add(await NavmeshCreationWorker(hkxPath, 'n', 10000 + i, nnavPath, nNvmSettingsPath, navmeshModelId, mapFileId));
-                nvmhktbnd.Files.Add(await NavmeshCreationWorker(hkxPath, 'o', 20000 + i, onavPath, oNvmSettingsPath, navmeshModelId, mapFileId));
+                nvmhktbnd.Files.Add(await CreateNavmeshFileAsync(hkxPath, 'n', 10000 + i, nnavPath, nNvmSettingsPath, navmeshModelId, mapFileId));
+                nvmhktbnd.Files.Add(await CreateNavmeshFileAsync(hkxPath, 'o', 20000 + i, onavPath, oNvmSettingsPath, navmeshModelId, mapFileId));
             }
             catch (Exception ex)
             {
@@ -53,7 +54,7 @@ public class FileCreationWorker
         nvmhktbnd.Write(Path.Combine(outputPath, "map", $"m{map:D2}", $"m{mapFileId}", $"m{mapFileId}.nvmhktbnd.dcx"));
     }
 
-    private static async Task<BinderFile> NavmeshCreationWorker(string hkxPath, char internalNamePrefix, int id, string navPath, string nvmSettingsPath, int navmeshModelId, string mapFileId)
+    private static async Task<BinderFile> CreateNavmeshFileAsync(string hkxPath, char internalNamePrefix, int id, string navPath, string nvmSettingsPath, int navmeshModelId, string mapFileId)
     {
         await HKXtoNAV(hkxPath, navPath, nvmSettingsPath);
 

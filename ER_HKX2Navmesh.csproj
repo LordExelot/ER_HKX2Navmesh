@@ -27,11 +27,11 @@
   </ItemGroup>
 
   <Target Name="CopyFileToRoot" AfterTargets="AfterBuild">
-	  <Copy SourceFiles="Resources\ERNavmeshGen.dll" DestinationFolder="$(OutDir)" />
-	  <Copy SourceFiles="Resources\ERNavmeshGenCS.dll" DestinationFolder="$(OutDir)" />
-	  <Copy SourceFiles="Resources\Zydis.dll" DestinationFolder="$(OutDir)" />
-	  <Copy SourceFiles="Resources\SoulsFormats.dll" DestinationFolder="$(OutDir)" />
-	  <Copy SourceFiles="Resources\keystone.dll" DestinationFolder="$(OutDir)" />
+    <Copy SourceFiles="Resources\ERNavmeshGen.dll" DestinationFolder="$(OutDir)" />
+    <Copy SourceFiles="Resources\ERNavmeshGenCS.dll" DestinationFolder="$(OutDir)" />
+    <Copy SourceFiles="Resources\Zydis.dll" DestinationFolder="$(OutDir)" />
+    <Copy SourceFiles="Resources\SoulsFormats.dll" DestinationFolder="$(OutDir)" />
+    <Copy SourceFiles="Resources\keystone.dll" DestinationFolder="$(OutDir)" />
   </Target>
 
 </Project>

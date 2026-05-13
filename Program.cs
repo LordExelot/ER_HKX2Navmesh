@@ -43,7 +43,7 @@ class Program
         Console.WriteLine("Processing...");
         Console.WriteLine();
 
-        await FileCreationWorker.CreateNavmesh(collisionPaths, outputPath, map, mapFileId);
+        await HKXtoNavmesh.GenerateNavmeshAsync(collisionPaths, outputPath, map, mapFileId);
 
         Console.WriteLine("Files created succesfully");
         Console.WriteLine("Output Path: " + outputPath);
