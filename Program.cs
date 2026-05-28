@@ -5,7 +5,6 @@ namespace ER_HKX2Navmesh;
 
 class Program
 {
-    private static readonly string _cachePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cache");
     private static readonly ToolSettings _settings = ToolSettings.Instance;
 
     static async Task Main(string[] args)
@@ -21,7 +20,7 @@ class Program
     }
 
     private static async Task MainWorker(List<string>? collisionPaths)
-    {
+    { 
         if (collisionPaths == null || collisionPaths.Count == 0)
         {
             if (!Debugger.IsAttached)
@@ -29,7 +28,7 @@ class Program
                 Console.WriteLine("No collision file path provided. Please provide a path to a collision HKX file as an argument.");
                 return;
             }
-            collisionPaths = [@"C:\Users\Jesse\Downloads\n31_83_00_00_000100.hkx"];
+            collisionPaths = [@"C:\Users\Jesse\Downloads\n12_01_00_00_000100.hkx"];
         }
 
         var outputPath = await InputProcessor.GetOutputPath(collisionPaths);
@@ -39,14 +38,19 @@ class Program
         _settings.LastMapId = mapFileId;
         await _settings.SaveAsync();
 
+        var outputDir = Path.Combine(outputPath, "map", $"m{map:D2}", $"m{mapFileId}");
+        var shouldMerge = InputProcessor.GetShouldMerge(outputDir, mapFileId);
+        if (shouldMerge)
+            Console.WriteLine("Merging enabled: Generated navmesh will be merged with the existing NVA");
+
         Console.WriteLine($"Generating navmesh for m{mapFileId}");
         Console.WriteLine("Processing...");
         Console.WriteLine();
 
-        await HKXtoNavmesh.GenerateNavmeshAsync(collisionPaths, outputPath, map, mapFileId);
+        await HKXtoNavmesh.GenerateNavmeshAsync(collisionPaths, outputDir, mapFileId, shouldMerge);
 
         Console.WriteLine("Files created succesfully");
-        Console.WriteLine("Output Path: " + Path.Combine(outputPath, "map", $"m{map:D2}", $"m{mapFileId}") + "\\");
+        Console.WriteLine("Output Path: " + outputDir + "\\");
         Console.WriteLine();
     }
 }

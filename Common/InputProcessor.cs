@@ -89,4 +89,25 @@ public class InputProcessor
             return (_map, _area, _region, _block);
         }
     }
+
+    public static bool GetShouldMerge(string path, string mapFileId)
+    {
+        var nvaPath = Path.Combine(path, $"m{mapFileId}.nva.dcx");
+        var nvmPath = Path.Combine(path, $"m{mapFileId}.nvmhktbnd.dcx");
+        if (!File.Exists(nvaPath) || !File.Exists(nvmPath)) return false;
+        
+        Console.WriteLine($"Do you want to merge these HKX files into the existing \'m{mapFileId}.nva.dcx\' and \'m{mapFileId}.nvmhktbnd.dcx\'? (y/n)");
+        
+        while (true)
+        {
+            var input = Console.ReadLine();
+            if (string.IsNullOrEmpty(input)) continue;
+
+            input = input.Trim().ToLower();
+            if (input == "y" || input == "yes") return true;
+            if (input == "n" || input == "no") return false;
+
+            Console.WriteLine("Invalid input. Please enter 'y' or 'n'.");
+        }
+    }
 }
