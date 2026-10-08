@@ -1,0 +1,3 @@
+[submodule "external/ERNavmeshGen"]
+	path = external/ERNavmeshGen
+	url = https://github.com/Nordgaren/ERNavmeshGen

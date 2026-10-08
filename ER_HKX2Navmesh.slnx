@@ -1,3 +1,7 @@
 <Solution>
+  <Folder Name="/external/" />
+  <Folder Name="/external/ERNavmeshGen/">
+    <Project Path="external/ERNavmeshGen/ERNavmeshGenCS/ERNavmeshGenCS.csproj" />
+  </Folder>
   <Project Path="ER_HKX2Navmesh.csproj" />
 </Solution>

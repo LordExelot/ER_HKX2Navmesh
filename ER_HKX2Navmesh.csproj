@@ -35,6 +35,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="external\ERNavmeshGen\ERNavmeshGenCS\ERNavmeshGenCS.csproj" />
+  </ItemGroup>
+
   <Target Name="CopyFileToRoot" AfterTargets="AfterBuild">
     <Copy SourceFiles="Resources\ERNavmeshGen.dll" DestinationFolder="$(OutDir)" />
     <Copy SourceFiles="Resources\ERNavmeshGenCS.dll" DestinationFolder="$(OutDir)" />
